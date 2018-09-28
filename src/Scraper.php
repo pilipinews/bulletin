@@ -3,6 +3,8 @@
 namespace Pilipinews\Website\Bulletin;
 
 use Pilipinews\Common\Article;
+use Pilipinews\Common\Client;
+use Pilipinews\Common\Crawler as DomCrawler;
 use Pilipinews\Common\Interfaces\ScraperInterface;
 use Pilipinews\Common\Scraper as AbstractScraper;
 
@@ -30,16 +32,65 @@ class Scraper extends AbstractScraper implements ScraperInterface
     /**
      * Returns the contents of an article.
      *
+     * @param  string $link
      * @return \Pilipinews\Common\Article
      */
-    public function scrape()
+    public function scrape($link)
     {
+        $this->prepare(mb_strtolower($link));
+
         $title = $this->title('.uk-article-title');
 
-        $this->remove($this->removables);
+        $this->remove((array) $this->removables);
 
-        $html = $this->html($this->body('article'));
+        $body = $this->body('article');
 
-        return new Article($title, (string) $html);
+        $body = $this->slidenav($body);
+
+        return new Article($title, $this->html($body));
+    }
+
+    /**
+     * Initializes the crawler instance.
+     *
+     * @param  string $link
+     * @return void
+     */
+    protected function prepare($link)
+    {
+        $response = Client::request((string) $link);
+
+        $regex = '/<p>Tags:(.*?)<\/p>/i';
+
+        $html = preg_replace($regex, '', $response);
+
+        $this->crawler = new DomCrawler((string) $html);
+    }
+
+    /**
+     * Converts an slidenav element into a readable string.
+     *
+     * @param  \Pilipinews\Common\Crawler $crawler
+     * @return \Pilipinews\Common\Crawler
+     */
+    protected function slidenav(DomCrawler $crawler)
+    {
+        $callback = function (DomCrawler $crawler) {
+            $items = $crawler->filter('img');
+
+            $items = $items->each(function ($crawler) {
+                $link = 'https://news.mb.com.ph';
+
+                $image = $link . $crawler->attr('src');
+
+                return '<p>PHOTO: ' . $image . '</p>';
+            });
+
+            return implode("\n\n", (array) $items);
+        };
+
+        $class = '.uk-slidenav-position';
+
+        return $this->replace($crawler, $class, $callback);
     }
 }
