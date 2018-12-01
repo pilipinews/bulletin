@@ -60,7 +60,8 @@ class Scraper extends AbstractScraper implements ScraperInterface
      */
     protected function image(DomCrawler $crawler)
     {
-        $callback = function (DomCrawler $crawler) {
+        $callback = function (DomCrawler $crawler)
+        {
             $result = $crawler->filter('img')->first();
 
             $image = (string) $result->attr('src');
@@ -102,10 +103,12 @@ class Scraper extends AbstractScraper implements ScraperInterface
      */
     protected function slidenav(DomCrawler $crawler)
     {
-        $callback = function (DomCrawler $crawler) {
+        $callback = function (DomCrawler $crawler)
+        {
             $items = $crawler->filter('img');
 
-            $items = $items->each(function ($crawler) {
+            $items = $items->each(function ($crawler)
+            {
                 $link = 'https://news.mb.com.ph';
 
                 $image = $link . $crawler->attr('src');

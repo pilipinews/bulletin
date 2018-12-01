@@ -32,12 +32,14 @@ class Crawler implements CrawlerInterface
     {
         $articles = array();
 
-        foreach ((array) $this->categories as $link) {
+        foreach ((array) $this->categories as $link)
+        {
             $crawler = new DomCrawler(Client::request($link));
 
             $news = $crawler->filter('.uk-grid .uk-article');
 
-            $items = $news->each(function (DomCrawler $node) {
+            $items = $news->each(function (DomCrawler $node)
+            {
                 return $node->attr('data-permalink');
             });
 
