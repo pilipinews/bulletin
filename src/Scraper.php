@@ -12,7 +12,7 @@ use Pilipinews\Common\Scraper as AbstractScraper;
  * Manila Bulletin Scraper
  *
  * @package Pilipinews
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Scraper extends AbstractScraper implements ScraperInterface
 {
@@ -45,9 +45,36 @@ class Scraper extends AbstractScraper implements ScraperInterface
 
         $body = $this->body('article');
 
+        $body = $this->image($body);
+
         $body = $this->slidenav($body);
 
         return new Article($title, $this->html($body));
+    }
+
+    /**
+     * Converts image elements to readable string.
+     *
+     * @param  \Pilipinews\Common\Crawler $crawler
+     * @return \Pilipinews\Common\Crawler
+     */
+    protected function image(DomCrawler $crawler)
+    {
+        $callback = function (DomCrawler $crawler) {
+            $result = $crawler->filter('img')->first();
+
+            $image = (string) $result->attr('src');
+
+            $text = $crawler->filter('p')->first();
+
+            $message = $image . ' - ' . $text->html();
+
+            $message = str_replace('<br>', ' ', $message);
+
+            return '<p>PHOTO: ' . $message . '</p>';
+        };
+
+        return $this->replace($crawler, '.wp-caption', $callback);
     }
 
     /**
