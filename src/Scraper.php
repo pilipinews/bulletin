@@ -37,11 +37,11 @@ class Scraper extends AbstractScraper implements ScraperInterface
      */
     public function scrape($link)
     {
-        $this->prepare(mb_strtolower($link));
+        $this->prepare((string) $link);
 
         $title = $this->title('.uk-article-title');
 
-        $this->remove((array) $this->removables);
+        $this->remove($this->removables);
 
         $body = $this->body('article');
 
@@ -49,7 +49,9 @@ class Scraper extends AbstractScraper implements ScraperInterface
 
         $body = $this->slidenav($body);
 
-        return new Article($title, $this->html($body));
+        $html = $this->html($body);
+
+        return new Article($title, $html, $link);
     }
 
     /**

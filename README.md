@@ -7,8 +7,6 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Crawler and scraper for [Manila Bulletin](https://news.mb.com.ph/) website.
-
 ## Installation
 
 Install `Manila Bulletin` via [Composer](https://getcomposer.org/):
@@ -16,10 +14,6 @@ Install `Manila Bulletin` via [Composer](https://getcomposer.org/):
 ``` bash
 $ composer require pilipinews/bulletin
 ```
-
-## Basic Usage
-
-Coming soon.
 
 ## Changelog
 
