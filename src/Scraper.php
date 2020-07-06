@@ -39,11 +39,11 @@ class Scraper extends AbstractScraper implements ScraperInterface
     {
         $this->prepare((string) $link);
 
-        $title = $this->title('.uk-article-title');
+        $title = $this->title('h2.title');
 
         $this->remove($this->removables);
 
-        $body = $this->body('article');
+        $body = $this->body('.article-content');
 
         $body = $this->image($body);
 
@@ -68,7 +68,7 @@ class Scraper extends AbstractScraper implements ScraperInterface
 
             $image = (string) $result->attr('src');
 
-            $text = $crawler->filter('p')->first();
+            $text = $crawler->filter('figcaption')->first();
 
             $message = $image . ' - ' . $text->html();
 
@@ -77,7 +77,7 @@ class Scraper extends AbstractScraper implements ScraperInterface
             return '<p>PHOTO: ' . $message . '</p>';
         };
 
-        return $this->replace($crawler, '.wp-caption', $callback);
+        return $this->replace($crawler, '.wp-block-image', $callback);
     }
 
     /**

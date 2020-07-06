@@ -13,7 +13,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $link = 'https://news.mb.com.ph/';
+    protected $link = 'https://mb.com.ph/';
 
     /**
      * @var \Pilipinews\Common\Interfaces\ScraperInterface
