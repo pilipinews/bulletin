@@ -18,8 +18,8 @@ class Crawler implements CrawlerInterface
      * @var string[]
      */
     protected $categories = array(
-        'http://mb.com.ph/category/news/national/',
-        'http://mb.com.ph/category/news/metro/',
+        'https://mb.com.ph/category/news/national/',
+        'https://mb.com.ph/category/news/metro/',
     );
 
     /**

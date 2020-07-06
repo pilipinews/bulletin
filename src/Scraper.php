@@ -111,7 +111,7 @@ class Scraper extends AbstractScraper implements ScraperInterface
 
             $items = $items->each(function ($crawler)
             {
-                $link = 'https://news.mb.com.ph';
+                $link = 'https://mb.com.ph';
 
                 $image = $link . $crawler->attr('src');
 
