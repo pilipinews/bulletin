@@ -35,11 +35,13 @@ class Crawler implements CrawlerInterface
         {
             $crawler = new DomCrawler(Client::request($link));
 
-            $news = $crawler->filter('.uk-grid .uk-article');
+            $news = $crawler->filter('.articles-list > .article');
 
             $items = $news->each(function (DomCrawler $node)
             {
-                return $node->attr('data-permalink');
+                $current = $node->filter('h4.title > a');
+
+                return (string) $current->attr('href');
             });
 
             $articles = array_merge($articles, $items);
